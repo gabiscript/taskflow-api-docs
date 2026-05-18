@@ -24,7 +24,16 @@
           }
         ]
       }
-    ]
+    ],
+
+    "global": {
+      "anchors": [
+        {
+          "anchor": "API Base URL",
+          "href": "https://test-writechoice.onrender.com"
+        }
+      ]
+    }
   },
 
   "logo": {
@@ -38,12 +47,19 @@
         "label": "GitHub",
         "href": "https://github.com/gabiscript/taskflow-api-docs"
       }
-    ]
+    ],
+
+    "primary": {
+      "type": "button",
+      "label": "API Repository",
+      "href": "https://github.com/writechoiceorg/Technical-Writing-Test-TaskFlow-API"
+    }
   },
 
   "footer": {
     "socials": {
-      "github": "https://github.com/gabiscript"
+      "github": "https://github.com/gabiscript",
+      "linkedin": "https://linkedin.com"
     }
   }
 }
