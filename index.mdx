@@ -1,133 +1,369 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
-icon: 'star'
+title: "TaskFlow"
+description: "This is the TaskFlow API documentation page."
+icon: "star"
 ---
 
-## Setting up
 
-Get your documentation site up and running in minutes.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+## Overview
 
-## Make it yours
+TaskFlow is a lightweight task management API that allows you to create projects, manage tasks, update task statuses, and delete tasks.
 
-Design a docs site that looks great and empowers your users.
+This API follows a simple workflow:
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
+1. Create a project
+2. Create tasks inside the project
+3. Retrieve projects tasks
+4. Update task status
+5. Delete tasks
 
-## Create beautiful pages
+## Authentication
 
-Everything you need to create world-class documentation.
+All API requests must include a bearer token in the Authorization header.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+**Example:**
 
-## Make your content agent ready
+```json
+curl https://test-writechoice.onrender.com/projects \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
 
-Make your docs work for humans and AI agents alike.
+## Quickstart
 
-<Columns cols={2}>
-  <Card
-    title="Prompt component"
-    icon="robot"
-    href="/agent-ready/prompt"
-  >
-    Embed shareable AI prompts readers can copy or open in Cursor.
-  </Card>
-  <Card
-    title="Visibility"
-    icon="eye"
-    href="/agent-ready/visibility"
-  >
-    Show different content to humans and agents reading your docs.
-  </Card>
-  <Card
-    title="Contextual menu"
-    icon="bolt"
-    href="/agent-ready/contextual"
-  >
-    Give readers one-click access to Claude, ChatGPT, Cursor, and more.
-  </Card>
-  <Card
-    title="AI coding tools"
-    icon="wand-magic-sparkles"
-    href="/ai-tools/claude-code"
-  >
-    Set up Claude Code, Cursor, or Windsurf with Mintlify's skill.
-  </Card>
-</Columns>
+This guide walks you through the complete TaskFlow workflow:
 
-## Need inspiration?
+<Steps>
+  <Step title="Create a project">
+    Before you start creating tasks, you must first create a project. Send a POST request to create a new project.
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+    ## Request
+
+    ```shellscript
+    curl -X POST https://test-writechoice.onrender.com/projects \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "Documentation Project",
+        "description": "Testing the TaskFlow API"
+      }'
+    ```
+
+    ## Response
+
+    ```shellscript
+    {
+      "project_id": "0aac3323-0469-4440-8256-676828b61915",
+      "name": "Documentation Project",
+      "description": "Testing the TaskFlow API",
+      "created_at": "..."
+    }
+    ```
+
+    Save the returned ``project_id``. You'll need it to create, list and update tasks.
+  </Step>
+  <Step title="Create a task">
+    Use the ``project_id`` returned from the previous request.
+
+    ## Request
+
+    ```shellscript
+    curl -X POST https://test-writechoice.onrender.com/tasks \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "project_id": "0aac3323-0469-4440-8256-676828b61915",
+        "title": "Write API overview",
+        "description": "Create the introduction and quickstart sections"
+      }'
+    ```
+
+    ## Response
+
+    ```shellscript
+    {
+      "task_id": "5c8d7ae4-99af-4432-b683-e573300992f6",
+      "status": "pending"
+    }
+    ```
+
+    Save the returned ``task_id``.
+  </Step>
+  <Step title="Retrieve project tasks">
+    Retrieve all tasks associated with your project.
+
+    ```shellscript
+    curl https://test-writechoice.onrender.com/projects/0aac3323-0469-4440-8256-676828b61915/tasks \
+      -H "Authorization: Bearer YOUR_API_KEY"
+    ```
+  </Step>
+  <Step title="Update a task">
+    Update the task status as needed.
+
+    ```shellscript
+    curl -X PATCH https://test-writechoice.onrender.com/tasks/5c8d7ae4-99af-4432-b683-e573300992f6 \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "status": "in_progress"
+      }'
+    ```
+  </Step>
+  <Step title="Delete a task">
+    Delete the task permanently.
+
+    ```shellscript
+    curl -X DELETE https://test-writechoice.onrender.com/tasks/5c8d7ae4-99af-4432-b683-e573300992f6 \
+      -H "Authorization: Bearer YOUR_API_KEY"
+    ```
+  </Step>
+</Steps>
+
+## Core Concepts
+
+### \
+Projects
+
+Projects are containers used to organize tasks. You must create a project before creating tasks. 
+
+### Tasks
+
+Tasks belong to projects and represent individual work items. Each task starts with a \`pending\` status by default.
+
+### Status Values
+
+Tasks support three status values:
+
+| Status | Meaning |
+| --- | --- |
+| `pending` | Task has not started |
+| `in_progress` | Task is being worked on |
+| `done` | Task completed |
+
+## \
+API Reference
+
+### \
+Create Project
+
+This endpoint creates a new project.
+
+```shellscript
+POST /projects
+```
+
+#### Request example:
+
+```shellscript
+{
+  "name": "Documentation Project",
+  "description": "Testing the TaskFlow API"
+}
+```
+
+#### Response example:
+
+```shellscript
+{
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "name": "Documentation Project",
+  "description": "Testing the TaskFlow API",
+  "created_at": "2026-05-15T12:00:00.000Z"
+}
+```
+
+### \
+Create Task
+
+This endpoint creates a new task inside an existing project. 
+
+<Warning>
+  You must create a project before creating tasks
+</Warning>
+
+```shellscript
+POST /tasks
+```
+
+#### Request example:
+
+```shellscript
+{
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "title": "Write API overview",
+  "description": "Create the introduction and quickstart sections"
+}
+```
+
+#### Response example:
+
+```shellscript
+{
+  "task_id": "5c8d7ae4-99af-4432-b683-e573300992f6",
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "title": "Write API overview",
+  "description": "Create the introduction and quickstart sections",
+  "status": "pending",
+  "created_at": "2026-05-15T12:19:38.905Z",
+  "updated_at": "2026-05-15T12:19:38.905Z"
+}
+```
+
+#### \
+List Tasks
+
+This endpoint returns all tasks associated with a specific project.
+
+<Warning>
+  If the project exists but has no tasks, the API returns an empty `tasks` array.
+</Warning>
+
+```shellscript
+GET /projects/{project_id}/tasks
+```
+
+#### Request example:
+
+```shellscript
+curl https://test-writechoice.onrender.com/projects/0aac3323-0469-4440-8256-676828b61915/tasks \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+#### Response example:
+
+```shellscript
+{
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "total": 1,
+  "tasks": [
+    {
+      "task_id": "5c8d7ae4-99af-4432-b683-e573300992f6",
+      "project_id": "0aac3323-0469-4440-8256-676828b61915",
+      "title": "Write API overview",
+      "description": "Create the introduction and quickstart sections",
+      "status": "pending",
+      "created_at": "2026-05-15T12:19:38.905Z",
+      "updated_at": "2026-05-15T12:19:38.905Z"
+    }
+  ]
+}
+```
+
+### \
+Update Task
+
+This endpoint updates one or more fields of an existing task. You can update:
+
+- **status**
+- **title**
+- **description**
+
+```shellscript
+PATCH /tasks/{task_id}
+```
+
+#### Request example:
+
+```shellscript
+{
+  "status": "in_progress"
+}
+```
+
+#### Response example:
+
+```shellscript
+{
+  "task_id": "5c8d7ae4-99af-4432-b683-e573300992f6",
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "title": "Write API overview",
+  "description": "Create the introduction and quickstart sections",
+  "status": "in_progress",
+  "created_at": "2026-05-15T12:19:38.905Z",
+  "updated_at": "2026-05-15T12:25:00.000Z"
+}
+```
+
+### Delete Task
+
+This endpoint permanently deletes a task.
+
+<Danger>
+  This action cannot be undone!
+</Danger>
+
+```shellscript
+DELETE /tasks/{task_id}
+```
+
+#### Request example:
+
+```shellscript
+curl -X DELETE https://test-writechoice.onrender.com/tasks/5c8d7ae4-99af-4432-b683-e573300992f6 \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+#### Response example:
+
+```shellscript
+{
+  "message": "Task '5c8d7ae4-99af-4432-b683-e573300992f6' was successfully deleted."
+}
+```
+
+### Additional Information
+
+#### Error Handling
+
+The following table describes the most common API error responses and how to resolve them.
+
+| Status | Description | Possible Solution |
+| :-- | :-- | --- |
+| 400 | Invalid request body | Verify that all required fields are included and properly formatted. |
+| 401 | Invalid or missing API key | Ensure the `Authorization` header is included in every request. |
+| 404 | Task not found | Verify that the provided `project_id` or `task_id` exists. |
+
+#### Example Error Response
+
+```shellscript
+{
+  "error": "Not Found",
+  "message": "No task found with task_id 'abc123'."
+}
+```
+
+#### Common Issues
+
+#### **401 Unauthorized**
+
+This error usually occurs when the Authorization header is missing or the API key is invalid.
+
+**Correct format:**
+
+```shellscript
+Authorization: Bearer YOUR_API_KEY
+```
+
+#### **404 Not Found**
+
+This error occurs when the requested project or task does not exist.
+
+Mostly caused by invalid `project_id`, invalid `task_id `or the resource was deleted previously.
+
+#### **400 Bad Request**
+
+This error occurs when the request body is incomplete or contains invalid values.
+
+**Example:**
+
+```shellscript
+{
+  "status": "completed"
+}
+```
+
+The allowed status values are:
+
+- `pending`
+- `in_progress`
+- `done`
