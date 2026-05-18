@@ -19,7 +19,11 @@
           {
             "group": "Getting Started",
             "pages": [
-              "index"
+              "index",
+              "quickstart",
+              "core-concepts",
+              "api-reference",
+              "error-handling"
             ]
           }
         ]

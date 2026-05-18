@@ -1,0 +1,56 @@
+---
+title: "Error Handling"
+---
+
+The following table describes the most common API error responses and how to resolve them.
+
+| Status | Description | Possible Solution |
+| :-- | :-- | :-- |
+| 400 | Invalid request body | Verify that all required fields are included and properly formatted. |
+| 401 | Invalid or missing API key | Ensure the `Authorization` header is included in every request. |
+| 404 | Task not found | Verify that the provided `project_id` or `task_id` exists. |
+
+#### Example Error Response
+
+```shellscript
+{
+  "error": "Not Found",
+  "message": "No task found with task_id 'abc123'."
+}
+```
+
+## Common Issues
+
+#### **401 Unauthorized**
+
+This error usually occurs when the Authorization header is missing or the API key is invalid.
+
+**Correct format:**
+
+```shellscript
+Authorization: Bearer YOUR_API_KEY
+```
+
+#### **404 Not Found**
+
+This error occurs when the requested project or task does not exist.
+
+Mostly caused by invalid `project_id`, invalid `task_id `or the resource was deleted previously.
+
+#### **400 Bad Request**
+
+This error occurs when the request body is incomplete or contains invalid values.
+
+**Example:**
+
+```shellscript
+{
+  "status": "completed"
+}
+```
+
+The allowed status values are:
+
+- `pending`
+- `in_progress`
+- `done`

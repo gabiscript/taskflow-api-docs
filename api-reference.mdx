@@ -1,0 +1,175 @@
+---
+title: "API Reference"
+---
+
+## API Reference
+
+### \
+Create Project
+
+This endpoint creates a new project.
+
+```shellscript
+POST /projects
+```
+
+#### Request example:
+
+```shellscript
+{
+  "name": "Documentation Project",
+  "description": "Testing the TaskFlow API"
+}
+```
+
+#### Response example:
+
+```shellscript
+{
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "name": "Documentation Project",
+  "description": "Testing the TaskFlow API",
+  "created_at": "2026-05-15T12:00:00.000Z"
+}
+```
+
+### \
+Create Task
+
+This endpoint creates a new task inside an existing project. 
+
+<Warning>
+  You must create a project before creating tasks
+</Warning>
+
+```shellscript
+POST /tasks
+```
+
+#### Request example:
+
+```shellscript
+{
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "title": "Write API overview",
+  "description": "Create the introduction and quickstart sections"
+}
+```
+
+#### Response example:
+
+```shellscript
+{
+  "task_id": "5c8d7ae4-99af-4432-b683-e573300992f6",
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "title": "Write API overview",
+  "description": "Create the introduction and quickstart sections",
+  "status": "pending",
+  "created_at": "2026-05-15T12:19:38.905Z",
+  "updated_at": "2026-05-15T12:19:38.905Z"
+}
+```
+
+#### \
+List Tasks
+
+This endpoint returns all tasks associated with a specific project.
+
+<Warning>
+  If the project exists but has no tasks, the API returns an empty `tasks` array.
+</Warning>
+
+```shellscript
+GET /projects/{project_id}/tasks
+```
+
+#### Request example:
+
+```shellscript
+curl https://test-writechoice.onrender.com/projects/0aac3323-0469-4440-8256-676828b61915/tasks \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+#### Response example:
+
+```shellscript
+{
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "total": 1,
+  "tasks": [
+    {
+      "task_id": "5c8d7ae4-99af-4432-b683-e573300992f6",
+      "project_id": "0aac3323-0469-4440-8256-676828b61915",
+      "title": "Write API overview",
+      "description": "Create the introduction and quickstart sections",
+      "status": "pending",
+      "created_at": "2026-05-15T12:19:38.905Z",
+      "updated_at": "2026-05-15T12:19:38.905Z"
+    }
+  ]
+}
+```
+
+### \
+Update Task
+
+This endpoint updates one or more fields of an existing task. You can update:
+
+- **status**
+- **title**
+- **description**
+
+```shellscript
+PATCH /tasks/{task_id}
+```
+
+#### Request example:
+
+```shellscript
+{
+  "status": "in_progress"
+}
+```
+
+#### Response example:
+
+```shellscript
+{
+  "task_id": "5c8d7ae4-99af-4432-b683-e573300992f6",
+  "project_id": "0aac3323-0469-4440-8256-676828b61915",
+  "title": "Write API overview",
+  "description": "Create the introduction and quickstart sections",
+  "status": "in_progress",
+  "created_at": "2026-05-15T12:19:38.905Z",
+  "updated_at": "2026-05-15T12:25:00.000Z"
+}
+```
+
+### Delete Task
+
+This endpoint permanently deletes a task.
+
+<Danger>
+  This action cannot be undone!
+</Danger>
+
+```shellscript
+DELETE /tasks/{task_id}
+```
+
+#### Request example:
+
+```shellscript
+curl -X DELETE https://test-writechoice.onrender.com/tasks/5c8d7ae4-99af-4432-b683-e573300992f6 \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+#### Response example:
+
+```shellscript
+{
+  "message": "Task '5c8d7ae4-99af-4432-b683-e573300992f6' was successfully deleted."
+}
+```
+
+### 
